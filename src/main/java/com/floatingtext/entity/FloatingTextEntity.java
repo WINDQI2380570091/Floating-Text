@@ -14,62 +14,41 @@ import net.minecraft.world.level.Level;
 
 import java.util.UUID;
 
-/**
- * 悬浮文字实体：一段悬浮在空气中的文字（由渲染器画出，不是方块）。
- * <p>
- * 三个重要能力全部由 Minecraft 原生机制提供，不写一行额外同步代码：
- * 1. 保存/加载：saveAdditional / readAdditional 读写 NBT，退出重进游戏文字仍在；
- * 2. 多人同步：所有字段放在 SynchedEntityData 里，修改后游戏自动发给所有客户端；
- * 3. 性能：实体不写任何每 tick 逻辑，游戏会自动剔除屏幕外的文字。
- */
+// 悬浮文字实体 文字本身是个实体而不是方块 这样能悬空也能贴墙
 public class FloatingTextEntity extends Entity {
 
-    // ===== 要同步的数据字段（游戏自动处理同步，改一次同步一次） =====
-
-    /** 文字内容。 */
+    // 所有要同步的字段都放 SynchedEntityData 里 改动会自动发给所有客户端
     private static final EntityDataAccessor<String> DATA_TEXT =
             SynchedEntityData.defineId(FloatingTextEntity.class, EntityDataSerializers.STRING);
-    /** 文字颜色（ARGB 格式，如 0xFFFFFFFF 白色）。 */
+    // 颜色 ARGB 格式
     private static final EntityDataAccessor<Integer> DATA_COLOR =
             SynchedEntityData.defineId(FloatingTextEntity.class, EntityDataSerializers.INT);
-    /** 文字大小（0.25 ~ 3）。 */
     private static final EntityDataAccessor<Float> DATA_SCALE =
             SynchedEntityData.defineId(FloatingTextEntity.class, EntityDataSerializers.FLOAT);
-    /** 位置微调 X（格，-1 ~ 1）。 */
     private static final EntityDataAccessor<Float> DATA_OFFSET_X =
             SynchedEntityData.defineId(FloatingTextEntity.class, EntityDataSerializers.FLOAT);
-    /** 位置微调 Y（格，-1 ~ 1）。 */
     private static final EntityDataAccessor<Float> DATA_OFFSET_Y =
             SynchedEntityData.defineId(FloatingTextEntity.class, EntityDataSerializers.FLOAT);
-    /** 位置微调 Z（格，-1 ~ 1）。 */
     private static final EntityDataAccessor<Float> DATA_OFFSET_Z =
             SynchedEntityData.defineId(FloatingTextEntity.class, EntityDataSerializers.FLOAT);
-    /** 文字在自己平面内的旋转角度（度，0 ~ 360）。 */
+    // 平面内的旋转角度
     private static final EntityDataAccessor<Float> DATA_ROTATION =
             SynchedEntityData.defineId(FloatingTextEntity.class, EntityDataSerializers.FLOAT);
-    /** 创建者的 UUID（字符串），用来做编辑权限校验。 */
+    // 创建者UUID 用来做编辑权限校验
     private static final EntityDataAccessor<String> DATA_OWNER =
             SynchedEntityData.defineId(FloatingTextEntity.class, EntityDataSerializers.STRING);
 
-    /** 新文字默认显示的占位内容（放置后马上可见，右键即可修改）。 */
+    // 新文字默认内容 放置后马上能看到 右键就能改
     public static final String DEFAULT_TEXT = "文字";
 
-    /** 文字最大长度（Unicode 字符数）：UI 输入框限制 100，服务端同样截断，防止恶意客户端发超长文字拖慢渲染。 */
+    // 文字长度上限 输入框和存档都按这个截断 防止超长文字拖慢渲染
     public static final int MAX_TEXT_LENGTH = 100;
 
     public FloatingTextEntity(EntityType<?> type, Level level) {
         super(type, level);
     }
 
-    /**
-     * 放置文字时使用的构造函数。
-     *
-     * @param x    世界坐标 X（格）
-     * @param y    世界坐标 Y（格）
-     * @param z    世界坐标 Z（格）
-     * @param yRot 水平朝向（度）：文字正面会朝向放置时玩家面对的方向
-     * @param owner 创建者 UUID
-     */
+    // 放置文字时用的构造
     public FloatingTextEntity(Level level, double x, double y, double z, float yRot, UUID owner) {
         this(ModEntityTypes.FLOATING_TEXT.get(), level);
         setPos(x, y, z);
@@ -84,13 +63,7 @@ public class FloatingTextEntity extends Entity {
         setRotation(0.0F);
     }
 
-    // ===== 数据同步定义（游戏要求的抽象方法） =====
-
-    /**
-     * 让实体可以被鼠标点击到（拾取）。
-     * 关键：Entity 默认 isPickable() 返回 false，不覆写的话右键点不到文字，
-     * 编辑面板就永远打不开。
-     */
+    // 必须返回 true 不然鼠标点不到文字 编辑面板就开不了
     @Override
     public boolean isPickable() {
         return true;
@@ -108,11 +81,7 @@ public class FloatingTextEntity extends Entity {
         entityData.define(DATA_OWNER, "");
     }
 
-    /**
-     * 数据变化时（包括网络同步过来时）自动调用。
-     * 文字内容/大小/偏移变了，就重新计算碰撞箱，让点击和渲染剔除更准确。
-     * （1.20.1 的该方法在 Entity 中是 public，不能用 protected。）
-     */
+    // 数据变了就重新算碰撞箱 保证点得到文字
     @Override
     public void onSyncedDataUpdated(EntityDataAccessor<?> key) {
         super.onSyncedDataUpdated(key);
@@ -122,19 +91,11 @@ public class FloatingTextEntity extends Entity {
         }
     }
 
-    /**
-     * 动态计算碰撞箱大小（游戏会自动调用这个方法）。
-     * 文字宽度 ≈ 按字符类型估算（全角 12 像素、半角 6 像素）× 0.05 × 大小；
-     * 高度 ≈ 9 像素 × 0.05 × 大小。
-     * 加上偏移量留一点点击余量，并做上下限保护。
-     * （1.20.1 的 Entity 没有 setSize 方法且 dimensions 字段是私有的，
-     *  正确做法是覆写 getDimensions(Pose)，游戏会在需要时自动调用。）
-     */
+    // 动态算碰撞箱 游戏会自动调用 不用手动设置
     @Override
     public EntityDimensions getDimensions(Pose pose) {
         float scale = getScale();
-        // 全角字符（中文）实际渲染宽度约是半角的两倍，按字符类型分别估算，
-        // 避免长中文文字的实际碰撞箱比文字窄、点不到
+        // 全角字符渲染宽度差不多是半角的两倍 分开算避免长中文点不到
         float width = Math.max(0.6F, Math.min(8.0F,
                 estimateTextWidth(getText()) * 0.05F * scale + Math.abs(getOffsetX()) * 2.0F + 0.5F));
         float height = Math.max(0.4F, Math.min(4.0F,
@@ -142,7 +103,7 @@ public class FloatingTextEntity extends Entity {
         return new EntityDimensions(width, height, false);
     }
 
-    /** 粗略估算文字渲染宽度（字体像素）：全角字符按 12 像素、半角按 6 像素。 */
+    // 粗略估算文字宽度 全角算 12 像素 半角算 6 像素
     private static float estimateTextWidth(String text) {
         float width = 0.0F;
         for (int i = 0; i < text.length(); i++) {
@@ -151,16 +112,14 @@ public class FloatingTextEntity extends Entity {
         return width;
     }
 
-    /** 全角字符范围（中文/日文/全角标点等），只用于碰撞箱估算。 */
+    // 全角字符范围 中文字符和全角标点都算
     private static boolean isFullWidth(char c) {
-        return (c >= '\u2E80' && c <= '\u9FFF')   // CJK 部首/汉字
-                || (c >= '\uF900' && c <= '\uFAFF') // CJK 兼容表意文字
-                || (c >= '\uFF00' && c <= '\uFF60'); // 全角标点/数字/字母
+        return (c >= '\u2E80' && c <= '\u9FFF')
+                || (c >= '\uF900' && c <= '\uFAFF')
+                || (c >= '\uFF00' && c <= '\uFF60');
     }
 
-    // ===== 存档读写（游戏要求的抽象方法） =====
-
-    /** 保存到存档（服务端把实体写进区块数据时调用）。 */
+    // 存档写入
     @Override
     protected void addAdditionalSaveData(CompoundTag tag) {
         tag.putString("Text", getText());
@@ -173,10 +132,9 @@ public class FloatingTextEntity extends Entity {
         tag.putString("Owner", getOwnerString());
     }
 
-    /** 从存档读取（服务端加载区块时调用）。 */
+    // 读取存档 数值都要做范围限制 存档被改坏也不会出巨型文字
     @Override
     protected void readAdditionalSaveData(CompoundTag tag) {
-        // 数值全部经过范围限制：存档数据被外部修改/损坏时也不会出现超大或非法值
         setText(truncate(tag.getString("Text"), MAX_TEXT_LENGTH));
         setColor(tag.getInt("Color"));
         setScale(safeClamp(tag.getFloat("Scale"), 0.15F, 10.0F, 1.0F));
@@ -187,9 +145,7 @@ public class FloatingTextEntity extends Entity {
         setOwnerString(tag.getString("Owner"));
     }
 
-    // ===== 网络同步（服务端和客户端共用，按键名读写，不依赖字段顺序） =====
-
-    /** 把当前文字数据打包成一个 tag（发给客户端同步用）。 */
+    // 网络同步用的 tag 按键名读写 不依赖字段顺序 服务端客户端共用
     public CompoundTag toSyncTag() {
         CompoundTag tag = new CompoundTag();
         tag.putString("text", getText());
@@ -202,10 +158,9 @@ public class FloatingTextEntity extends Entity {
         return tag;
     }
 
-    /** 从 tag 里读出数据并应用（服务端处理保存包、客户端处理同步包都用它）。 */
+    // 应用网络同步来的数据 空文字不覆盖 防止面板数据没同步时误清空
     public void applySyncTag(CompoundTag tag) {
         String text = truncate(tag.getString("text"), MAX_TEXT_LENGTH);
-        // 空文字保护：面板数据未同步时可能发来空文字，此时保留原文，避免误清空文字
         if (!text.isEmpty()) {
             setText(text);
         }
@@ -217,7 +172,7 @@ public class FloatingTextEntity extends Entity {
         setRotation(normalizeRotation(tag.getFloat("rotation")));
     }
 
-    /** 把文字截断到最多 maxChars 个 Unicode 字符（按代码点截断，不会切断 emoji 等代理对）。 */
+    // 按 Unicode 字符截断 不会切坏 emoji 这种代理对
     private static String truncate(String text, int maxChars) {
         if (text == null) {
             return "";
@@ -230,7 +185,7 @@ public class FloatingTextEntity extends Entity {
                 .toString();
     }
 
-    /** 数值限制在 [min, max]（非法值 NaN/Infinity 用 fallback 代替）。 */
+    // 数值限制 非法值用默认值兜底
     private static float safeClamp(float value, float min, float max, float fallback) {
         if (!Float.isFinite(value)) {
             return fallback;
@@ -238,15 +193,13 @@ public class FloatingTextEntity extends Entity {
         return Math.max(min, Math.min(max, value));
     }
 
-    /** 旋转角度归一化到 0 ~ 360（非法值归零）。 */
+    // 旋转归一化到 0 到 360
     private static float normalizeRotation(float value) {
         if (!Float.isFinite(value)) {
             return 0.0F;
         }
         return ((value % 360.0F) + 360.0F) % 360.0F;
     }
-
-    // ===== 字段读写（getter / setter） =====
 
     public String getText() {
         return entityData.get(DATA_TEXT);
@@ -304,7 +257,7 @@ public class FloatingTextEntity extends Entity {
         entityData.set(DATA_ROTATION, value);
     }
 
-    /** 创建者 UUID（无主文字返回 null）。 */
+    // 创建者UUID 无主的返回 null
     public UUID getOwner() {
         String value = getOwnerString();
         if (value == null || value.isEmpty()) {
@@ -313,7 +266,7 @@ public class FloatingTextEntity extends Entity {
         try {
             return UUID.fromString(value);
         } catch (IllegalArgumentException e) {
-            return null; // 存档数据损坏时按无主处理
+            return null; // UUID 格式坏了就当无主处理
         }
     }
 
@@ -329,18 +282,13 @@ public class FloatingTextEntity extends Entity {
         entityData.set(DATA_OWNER, value == null ? "" : value);
     }
 
-    /**
-     * 玩家是否有权编辑这条文字：创建者本人可以；无主的旧文字任何人可以。
-     * 客户端弹窗和编辑界面、服务端权限校验都统一走这个方法。
-     */
+    // 能不能编辑这条文字 创建者本人可以 无主的旧文字谁都能改 客户端服务端统一走这里
     public boolean canEdit(Player player) {
         UUID owner = getOwner();
         return owner == null || (player != null && owner.equals(player.getUUID()));
     }
 
-    /**
-     * 文字是装饰实体，不允许被玩家/生物推动（和盔甲架一致），保证位置精确不漂移。
-     */
+    // 不让玩家和生物推动 和盔甲架一样 免得位置漂移
     @Override
     public boolean isPushable() {
         return false;
