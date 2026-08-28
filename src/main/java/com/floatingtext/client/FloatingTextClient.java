@@ -1,7 +1,7 @@
 package com.floatingtext.client;
 
-import com.floatingtext.FloatingTextMod;
 import com.floatingtext.entity.FloatingTextEntity;
+import com.floatingtext.item.FloatingTextToolItem;
 import com.floatingtext.gui.FloatingTextScreen;
 import net.minecraft.client.Minecraft;
 import net.minecraft.world.entity.Entity;
@@ -41,7 +41,7 @@ public class FloatingTextClient {
             return;
         }
         // 3 秒内点过工具才算刚放置
-        long elapsed = System.currentTimeMillis() - FloatingTextMod.lastClientPlaceTime;
+        long elapsed = System.currentTimeMillis() - FloatingTextToolItem.lastPlaceTime;
         if (elapsed > 3000 || elapsed < 0) {
             return;
         }

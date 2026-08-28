@@ -25,9 +25,6 @@ public class FloatingTextMod {
     // 日志
     public static final Logger LOGGER = LogUtils.getLogger();
 
-    // 最近一次用工具放置文字的时间, 用来判断新实体是不是刚放的 好自动弹编辑界面
-    public static long lastClientPlaceTime = -1L;
-
     public FloatingTextMod() {
         IEventBus modBus = FMLJavaModLoadingContext.get().getModEventBus();
 

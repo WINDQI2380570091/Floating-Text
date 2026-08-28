@@ -1,6 +1,5 @@
 package com.floatingtext.item;
 
-import com.floatingtext.FloatingTextMod;
 import com.floatingtext.entity.FloatingTextEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -19,6 +18,9 @@ import net.minecraft.world.phys.Vec3;
 // 生成实体的逻辑只在服务端跑 保证多人模式下数据一致
 public class FloatingTextToolItem extends Item {
 
+    // 最近一次放置文字的时间 客户端弹窗判断用的
+    public static long lastPlaceTime = -1L;
+
     public FloatingTextToolItem() {
         // 只能拿一个 工具不会被消耗
         super(new Item.Properties().stacksTo(1));
@@ -29,8 +31,7 @@ public class FloatingTextToolItem extends Item {
     public InteractionResult useOn(UseOnContext context) {
         Level level = context.getLevel();
         if (level.isClientSide) {
-            // 记一下放置时间 新实体进客户端世界后好自动弹编辑界面
-            FloatingTextMod.lastClientPlaceTime = System.currentTimeMillis();
+            markPlaced();
             return InteractionResult.SUCCESS;
         }
         Player player = context.getPlayer();
@@ -59,7 +60,7 @@ public class FloatingTextToolItem extends Item {
     public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
         ItemStack stack = player.getItemInHand(hand);
         if (level.isClientSide) {
-            FloatingTextMod.lastClientPlaceTime = System.currentTimeMillis();
+            markPlaced();
             return InteractionResultHolder.sidedSuccess(stack, true);
         }
         Vec3 pos = player.getEyePosition().add(player.getLookAngle().scale(3.0));
@@ -89,5 +90,10 @@ public class FloatingTextToolItem extends Item {
         FloatingTextEntity entity = new FloatingTextEntity(level, x, y, z, snappedYaw, player.getUUID());
         entity.setXRot(pitch); // 顶面底面用 xRot 躺平 这个字段会自动保存同步
         level.addFreshEntity(entity);
+    }
+
+    // 记一下放置时间 新实体进客户端世界后好自动弹编辑界面
+    private void markPlaced() {
+        lastPlaceTime = System.currentTimeMillis();
     }
 }

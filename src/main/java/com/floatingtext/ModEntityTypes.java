@@ -20,7 +20,7 @@ public class ModEntityTypes {
             () -> EntityType.Builder.<FloatingTextEntity>of(FloatingTextEntity::new, MobCategory.MISC)
                     .sized(0.5F, 0.5F)
                     .clientTrackingRange(10)
-                    .build("floatingtext:floating_text"));
+                    .build(FloatingTextMod.MOD_ID + ":floating_text"));
 
     public static void register(IEventBus modBus) {
         ENTITY_TYPES.register(modBus);

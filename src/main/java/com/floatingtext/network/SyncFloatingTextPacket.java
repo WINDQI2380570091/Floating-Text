@@ -20,7 +20,7 @@ public class SyncFloatingTextPacket {
 
     public SyncFloatingTextPacket(int entityId, CompoundTag data) {
         this.entityId = entityId;
-        this.data = data == null ? new CompoundTag() : data;
+        this.data = data;
     }
 
     public static void encode(SyncFloatingTextPacket msg, FriendlyByteBuf buf) {

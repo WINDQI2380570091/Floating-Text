@@ -13,7 +13,6 @@ public class T72AVBoomPacket {
     public T72AVBoomPacket() {
     }
 
-    // 没有数据要传
     public static void encode(T72AVBoomPacket msg, FriendlyByteBuf buf) {
     }
 

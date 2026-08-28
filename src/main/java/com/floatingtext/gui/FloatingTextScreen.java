@@ -200,6 +200,7 @@ public class FloatingTextScreen extends Screen {
             }
             return;
         }
+        // 先把输入框的值都解析出来 再打包发服务端
         CompoundTag data = new CompoundTag();
         data.putString("text", textBox.getValue());
         data.putInt("color", color);

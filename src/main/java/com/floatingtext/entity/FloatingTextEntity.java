@@ -96,10 +96,10 @@ public class FloatingTextEntity extends Entity {
     public EntityDimensions getDimensions(Pose pose) {
         float scale = getScale();
         // 全角字符渲染宽度差不多是半角的两倍, 分开算避免长中文点不到
-        float width = Math.max(0.6F, Math.min(8.0F,
-                estimateTextWidth(getText()) * 0.05F * scale + Math.abs(getOffsetX()) * 2.0F + 0.5F));
-        float height = Math.max(0.4F, Math.min(4.0F,
-                9 * 0.05F * scale + Math.abs(getOffsetY()) * 2.0F + 0.5F));
+        float width = safeClamp(estimateTextWidth(getText()) * 0.05F * scale + Math.abs(getOffsetX()) * 2.0F + 0.5F,
+                0.6F, 8.0F, 0.6F);
+        float height = safeClamp(9 * 0.05F * scale + Math.abs(getOffsetY()) * 2.0F + 0.5F,
+                0.4F, 4.0F, 0.4F);
         return new EntityDimensions(width, height, false);
     }
 
@@ -274,11 +274,12 @@ public class FloatingTextEntity extends Entity {
         setOwnerString(uuid == null ? "" : uuid.toString());
     }
 
-    public String getOwnerString() {
+    // owner 内部存的是字符串 只有本类用到
+    private String getOwnerString() {
         return entityData.get(DATA_OWNER);
     }
 
-    public void setOwnerString(String value) {
+    private void setOwnerString(String value) {
         entityData.set(DATA_OWNER, value == null ? "" : value);
     }
 
