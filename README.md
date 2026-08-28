@@ -51,6 +51,4 @@ There is an item called **T-72AV** in the creative tab. Nothing happens when you
 
 ## Contact
 
-This mod was entirely written by AI, containing not a single line of hand-written code. Please be informed.
-
 If you encounter any issues, please contact me via Douyin (the Chinese version of TikTok) rather than GitHub or X. My Douyin ID: 87808215036
