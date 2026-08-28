@@ -23,11 +23,11 @@ public class ModItems {
     public static final DeferredRegister<CreativeModeTab> TABS =
             DeferredRegister.create(Registries.CREATIVE_MODE_TAB, FloatingTextMod.MOD_ID);
 
-    // 悬浮文字工具 右键方块面或空气放文字
+    // 悬浮文字工具, 右键方块面或空气放文字
     public static final RegistryObject<Item> FLOATING_TEXT_TOOL =
             ITEMS.register("floating_text_tool", FloatingTextToolItem::new);
 
-    // T-72AV 彩蛋物品 阿拉伯语环境下右键会爆炸
+    // T-72AV 彩蛋物品, 阿拉伯语环境下右键会爆炸
     public static final RegistryObject<Item> T72AV =
             ITEMS.register("t72av", T72AVItem::new);
 

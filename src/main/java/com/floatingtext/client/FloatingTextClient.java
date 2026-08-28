@@ -13,16 +13,16 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.WeakHashMap;
 
-// 纯客户端辅助类 服务端永远不会加载
+// 纯客户端辅助类, 服务端永远不会加载
 // 负责打开编辑界面和放置后自动弹窗
 public class FloatingTextClient {
 
     // 待弹窗的实体和允许弹窗的时间
-    // 用 WeakHashMap 键是实体对象 实体移除后条目自动被回收 不会占内存
+    // 用 WeakHashMap 键是实体对象, 实体移除后条目自动被回收 不会占内存
     // 不用实体 ID 当键是因为换服务器后 ID 会重新分配 容易误判成见过的
     private static final Map<FloatingTextEntity, Long> PENDING_AUTO_OPEN = new WeakHashMap<>();
 
-    // 放置后等 600 毫秒再弹窗 太早的话同步数据还没到 输入框显示默认值 点保存会清空文字
+    // 放置后等 600 毫秒再弹窗, 太早的话同步数据还没到 输入框显示默认值 点保存会清空文字
     private static final long AUTO_OPEN_DELAY_MS = 600L;
 
     // 打开编辑界面

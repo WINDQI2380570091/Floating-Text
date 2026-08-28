@@ -13,7 +13,7 @@ import net.minecraft.network.chat.Component;
 
 import java.util.Locale;
 
-// 悬浮文字编辑界面 纯客户端 服务端不会加载
+// 悬浮文字编辑界面, 纯客户端 服务端不会加载
 // 右键文字或放置后自动弹出 点保存才把数据发给服务端
 public class FloatingTextScreen extends Screen {
 
@@ -63,7 +63,7 @@ public class FloatingTextScreen extends Screen {
 
     @Override
     protected void init() {
-        // 窗口大小变化会重新走 init 先清掉旧控件 不然会叠在一起点错
+        // 窗口大小变化会重新走 init, 先清掉旧控件 不然会叠在一起点错
         this.clearWidgets();
 
         int centerX = this.width / 2;
@@ -83,7 +83,7 @@ public class FloatingTextScreen extends Screen {
                 Component.translatable("gui.floatingtext.text"));
         this.textBox.setMaxLength(FloatingTextEntity.MAX_TEXT_LENGTH);
         this.textBox.setValue(entity.getText());
-        // 必须用 addRenderableWidget 才会绘制 只 addWidget 的话不渲染
+        // 必须用 addRenderableWidget 才会绘制, 只 addWidget 的话不渲染
         this.addRenderableWidget(this.textBox);
         // 初始焦点给文字框 打开就能打字
         this.textBox.setFocused(true);
@@ -200,7 +200,7 @@ public class FloatingTextScreen extends Screen {
 
     // 保存 打包成 tag 发给服务端
     private void save() {
-        // 空文字不让存 提示一下留在界面
+        // 空文字不让存, 提示一下留在界面
         if (textBox.getValue().trim().isEmpty()) {
             Minecraft mc = Minecraft.getInstance();
             if (mc.player != null) {

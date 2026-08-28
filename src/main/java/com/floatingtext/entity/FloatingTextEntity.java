@@ -14,10 +14,10 @@ import net.minecraft.world.level.Level;
 
 import java.util.UUID;
 
-// 悬浮文字实体 文字本身是个实体而不是方块 这样能悬空也能贴墙
+// 悬浮文字实体, 文字本身是个实体而不是方块 这样能悬空也能贴墙
 public class FloatingTextEntity extends Entity {
 
-    // 所有要同步的字段都放 SynchedEntityData 里 改动会自动发给所有客户端
+    // 所有要同步的字段都放 SynchedEntityData 里, 改动会自动发给所有客户端
     private static final EntityDataAccessor<String> DATA_TEXT =
             SynchedEntityData.defineId(FloatingTextEntity.class, EntityDataSerializers.STRING);
     // 颜色 ARGB 格式
@@ -34,14 +34,14 @@ public class FloatingTextEntity extends Entity {
     // 平面内的旋转角度
     private static final EntityDataAccessor<Float> DATA_ROTATION =
             SynchedEntityData.defineId(FloatingTextEntity.class, EntityDataSerializers.FLOAT);
-    // 创建者UUID 用来做编辑权限校验
+    // 创建者UUID, 用来做编辑权限校验
     private static final EntityDataAccessor<String> DATA_OWNER =
             SynchedEntityData.defineId(FloatingTextEntity.class, EntityDataSerializers.STRING);
 
-    // 新文字默认内容 放置后马上能看到 右键就能改
+    // 新文字默认内容, 放置后马上能看到 右键就能改
     public static final String DEFAULT_TEXT = "文字";
 
-    // 文字长度上限 输入框和存档都按这个截断 防止超长文字拖慢渲染
+    // 文字长度上限, 输入框和存档都按这个截断 防止超长文字拖慢渲染
     public static final int MAX_TEXT_LENGTH = 100;
 
     public FloatingTextEntity(EntityType<?> type, Level level) {
@@ -91,11 +91,11 @@ public class FloatingTextEntity extends Entity {
         }
     }
 
-    // 动态算碰撞箱 游戏会自动调用 不用手动设置
+    // 动态算碰撞箱, 游戏会自动调用 不用手动设置
     @Override
     public EntityDimensions getDimensions(Pose pose) {
         float scale = getScale();
-        // 全角字符渲染宽度差不多是半角的两倍 分开算避免长中文点不到
+        // 全角字符渲染宽度差不多是半角的两倍, 分开算避免长中文点不到
         float width = Math.max(0.6F, Math.min(8.0F,
                 estimateTextWidth(getText()) * 0.05F * scale + Math.abs(getOffsetX()) * 2.0F + 0.5F));
         float height = Math.max(0.4F, Math.min(4.0F,

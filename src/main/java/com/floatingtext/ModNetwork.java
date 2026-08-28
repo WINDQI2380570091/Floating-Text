@@ -7,10 +7,10 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.network.NetworkRegistry;
 import net.minecraftforge.network.simple.SimpleChannel;
 
-// 网络通道 客户端和服务端传数据包用
+// 网络通道, 客户端和服务端传数据包用
 public class ModNetwork {
 
-    // 协议版本 改过数据包格式就升版本 老客户端会被拒绝连接
+    // 协议版本, 改过数据包格式就升版本 老客户端会被拒绝连接
     private static final String PROTOCOL_VERSION = "2";
 
     // 专属频道 floatingtext:main

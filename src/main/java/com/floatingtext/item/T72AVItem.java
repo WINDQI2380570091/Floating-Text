@@ -9,7 +9,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 
-// T-72AV 彩蛋物品 游戏语言是阿拉伯语时右键会炸
+// T-72AV 彩蛋物品, 游戏语言是阿拉伯语时右键会炸
 // 语言是客户端设置 所以在客户端判断 爆炸由服务端执行
 public class T72AVItem extends Item {
 

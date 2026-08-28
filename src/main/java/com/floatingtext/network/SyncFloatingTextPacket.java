@@ -11,7 +11,7 @@ import net.minecraftforge.network.NetworkEvent;
 import java.util.function.Supplier;
 
 // 服务端发客户端的全量同步包
-// 实体的 SynchedEntityData 只有新值不等于默认值才同步 偏移改回 0 颜色改回白这种改动
+// 实体的 SynchedEntityData 只有新值不等于默认值才同步, 偏移改回 0 颜色改回白这种改动
 // 客户端收不到 所以保存后单独发这个包把完整数据发给所有人
 public class SyncFloatingTextPacket {
 

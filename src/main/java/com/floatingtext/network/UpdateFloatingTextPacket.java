@@ -13,7 +13,7 @@ import net.minecraftforge.network.PacketDistributor;
 import java.util.function.Supplier;
 
 // 客户端发服务端的编辑或删除请求
-// 文字数据放 CompoundTag 里按键名读写 不会因为字段顺序错位
+// 文字数据放 CompoundTag 里按键名读写, 不会因为字段顺序错位
 public class UpdateFloatingTextPacket {
 
     private final int entityId;
@@ -47,7 +47,7 @@ public class UpdateFloatingTextPacket {
             if (!(serverLevel.getEntity(msg.entityId) instanceof FloatingTextEntity entity)) {
                 return; // 实体没了 可能已经被删
             }
-            // 得在同一个维度 而且离文字 8 格内 防止恶意客户端远程乱改
+            // 得在同一个维度 而且离文字 8 格内, 防止恶意客户端远程乱改
             if (entity.level() != serverLevel) {
                 return;
             }

@@ -25,7 +25,7 @@ public class FloatingTextMod {
     // 日志
     public static final Logger LOGGER = LogUtils.getLogger();
 
-    // 最近一次用工具放置文字的时间 用来判断新实体是不是刚放的 好自动弹编辑界面
+    // 最近一次用工具放置文字的时间, 用来判断新实体是不是刚放的 好自动弹编辑界面
     public static long lastClientPlaceTime = -1L;
 
     public FloatingTextMod() {
@@ -36,7 +36,7 @@ public class FloatingTextMod {
         ModEntityTypes.register(modBus);
         ModNetwork.register();
 
-        // 注册渲染器 这个事件只在客户端触发 服务端不会走到这里
+        // 注册渲染器, 这个事件只在客户端触发 服务端不会走到这里
         modBus.addListener((EntityRenderersEvent.RegisterRenderers event) ->
                 event.registerEntityRenderer(ModEntityTypes.FLOATING_TEXT.get(), FloatingTextRenderer::new));
 

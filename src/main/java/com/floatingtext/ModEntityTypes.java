@@ -15,7 +15,7 @@ public class ModEntityTypes {
     public static final DeferredRegister<EntityType<?>> ENTITY_TYPES =
             DeferredRegister.create(ForgeRegistries.ENTITY_TYPES, FloatingTextMod.MOD_ID);
 
-    // 悬浮文字实体 碰撞箱和追踪距离设个初始值 后面会自动按文字大小调整
+    // 悬浮文字实体 碰撞箱和追踪距离先设个初始值 后面会自动按文字大小调整
     public static final RegistryObject<EntityType<FloatingTextEntity>> FLOATING_TEXT = ENTITY_TYPES.register("floating_text",
             () -> EntityType.Builder.<FloatingTextEntity>of(FloatingTextEntity::new, MobCategory.MISC)
                     .sized(0.5F, 0.5F)

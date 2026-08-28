@@ -15,7 +15,7 @@ import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 
-// 悬浮文字工具 右键方块面贴墙放 右键空气悬浮放
+// 悬浮文字工具, 右键方块面贴墙放 右键空气悬浮放
 // 生成实体的逻辑只在服务端跑 保证多人模式下数据一致
 public class FloatingTextToolItem extends Item {
 
@@ -37,7 +37,7 @@ public class FloatingTextToolItem extends Item {
         if (player == null) {
             return InteractionResult.PASS;
         }
-        // 面中心是方块中心加 0.5 再沿法线外移 0.01 格 配合 POLYGON_OFFSET 不会嵌进方块
+        // 面中心是方块中心加 0.5 再沿法线外移 0.01 格, 配合 POLYGON_OFFSET 不会嵌进方块
         Direction face = context.getClickedFace();
         BlockPos blockPos = context.getClickedPos();
         double x = blockPos.getX() + 0.5 + face.getStepX() * 0.51;
@@ -54,7 +54,7 @@ public class FloatingTextToolItem extends Item {
         return InteractionResult.SUCCESS;
     }
 
-    // 右键空气 面前 3 格放字 位置被方块挡住就沿视线往外找空气位置
+    // 右键空气, 面前 3 格放字 位置被方块挡住就沿视线往外找空气位置
     @Override
     public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
         ItemStack stack = player.getItemInHand(hand);
