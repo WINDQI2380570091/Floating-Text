@@ -1,5 +1,7 @@
 # Floating Text
 
+**Languages:** [English](README.md) | [简体中文](README.zh-CN.md) | [繁體中文](README.zh-TW.md) | [繁體中文（香港）](README.zh-HK.md)
+
 Place editable floating text in the world. Right-click a block face or air to place text; right-click the text to edit its content, color, scale, position and rotation. Text is rendered with the game's native font, with full save support and multiplayer sync.
 
 - Minecraft 1.20.1 · Forge 47.x (tested on 47.4.10) · Java 17
