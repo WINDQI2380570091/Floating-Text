@@ -53,14 +53,13 @@ public class FloatingTextMod {
     @SubscribeEvent
     public static void onEntityInteract(PlayerInteractEvent.EntityInteract event) {
         // 不是本模组的文字就不管
-        if (!(event.getTarget() instanceof FloatingTextEntity)) {
+        if (!(event.getTarget() instanceof FloatingTextEntity entity)) {
             return;
         }
         // 取消默认交互 防止和物品使用冲突
         event.setCanceled(true);
 
         if (event.getSide().isClient()) {
-            FloatingTextEntity entity = (FloatingTextEntity) event.getTarget();
             // 只在客户端开界面 服务端不加载客户端类
             DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> FloatingTextClient.openScreen(entity));
         }

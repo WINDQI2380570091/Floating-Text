@@ -2,6 +2,7 @@ package com.floatingtext.item;
 
 import com.floatingtext.ModNetwork;
 import com.floatingtext.network.T72AVBoomPacket;
+import net.minecraft.client.Minecraft;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.player.Player;
@@ -22,7 +23,7 @@ public class T72AVItem extends Item {
         ItemStack stack = player.getItemInHand(hand);
         if (level.isClientSide) {
             // 语言代码是 ar 开头的都算阿拉伯语
-            String lang = net.minecraft.client.Minecraft.getInstance().options.languageCode;
+            String lang = Minecraft.getInstance().options.languageCode;
             if (lang != null && lang.toLowerCase().startsWith("ar")) {
                 // 发爆炸请求给服务端
                 ModNetwork.CHANNEL.sendToServer(new T72AVBoomPacket());

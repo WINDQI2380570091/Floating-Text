@@ -166,15 +166,7 @@ public class FloatingTextScreen extends Screen {
 
     // 数值加减 限制范围后写回输入框
     private void changeNumber(EditBox box, float step, float min, float max, float fallback) {
-        float value = parseNumber(box, fallback);
-        value += step;
-        if (value < min) {
-            value = min;
-        }
-        if (value > max) {
-            value = max;
-        }
-        box.setValue(format(value));
+        box.setValue(format(clamp(parseNumber(box, fallback) + step, min, max)));
     }
 
     // 旋转一次 5 度 0 到 360 循环
