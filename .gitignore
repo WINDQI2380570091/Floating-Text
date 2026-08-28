@@ -1,0 +1,15 @@
+# Gradle 构建产物
+build/
+.gradle/
+
+# 开发运行目录（游戏存档等）
+run/
+
+# IDE 配置
+.idea/
+*.iml
+.classpath
+.project
+.settings/
+bin/
+out/

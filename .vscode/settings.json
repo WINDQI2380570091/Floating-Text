@@ -1,0 +1,13 @@
+{
+  // VS Code 开发本模组的推荐设置
+  // 作用：
+  // 1. Java 扩展自动感知 build.gradle 的变化，不用每次手动重新导入
+  // 2. 所有文件强制 UTF-8 编码（代码注释是中文，必须用 UTF-8）
+  // 3. 关闭 Java 的语言服务器自动下载 JDK 提示（我们已经手动装好 JDK 17）
+  "java.configuration.updateBuildConfiguration": "automatic",
+  // 关闭空安全分析：Minecraft 的 @Nullable 标注很混乱，开启会产生大量"Null type safety"噪音警告，
+  // 这些警告完全不影响编译，关掉后问题面板才干净
+  "java.compile.nullAnalysis.mode": "disabled",
+  "files.encoding": "utf8",
+  "java.jdt.ls.vmargs": "-XX:+UseParallelGC -XX:GCTimeRatio=4 -XX:AdaptiveSizePolicyWeight=90 -Dsun.zip.disableMemoryMapping=true -Xmx2G"
+}

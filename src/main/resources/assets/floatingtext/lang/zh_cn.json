@@ -1,0 +1,31 @@
+{
+  "item.floatingtext.floating_text_tool": "悬浮文字工具",
+  "item.floatingtext.t72av": "T-72AV",
+  "itemGroup.floatingtext": "悬浮文字 Floating Text",
+  "entity.floatingtext.floating_text": "悬浮文字",
+
+  "gui.floatingtext.title": "编辑悬浮文字",
+  "gui.floatingtext.text": "文字",
+  "gui.floatingtext.scale": "大小",
+  "gui.floatingtext.offsetX": "X偏移",
+  "gui.floatingtext.offsetY": "Y偏移",
+  "gui.floatingtext.offsetZ": "Z偏移",
+  "gui.floatingtext.rotation": "旋转",
+  "gui.floatingtext.color": "颜色",
+  "gui.floatingtext.save": "保存",
+  "gui.floatingtext.delete": "删除",
+  "gui.floatingtext.cancel": "取消",
+  "gui.floatingtext.ownerOnly": "只有创建者可以编辑",
+
+  "message.floatingtext.textEmpty": "文字不能为空",
+  "message.floatingtext.blocked": "此位置被方块挡住，无法放置文字",
+
+  "floatingtext.color.white": "白",
+  "floatingtext.color.black": "黑",
+  "floatingtext.color.red": "红",
+  "floatingtext.color.yellow": "黄",
+  "floatingtext.color.green": "绿",
+  "floatingtext.color.blue": "蓝",
+  "floatingtext.color.purple": "紫",
+  "floatingtext.color.orange": "橙"
+}

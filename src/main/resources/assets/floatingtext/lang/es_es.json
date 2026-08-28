@@ -1,0 +1,31 @@
+{
+  "item.floatingtext.floating_text_tool": "Herramienta de texto flotante",
+  "item.floatingtext.t72av": "T-72AV",
+  "itemGroup.floatingtext": "Texto flotante",
+  "entity.floatingtext.floating_text": "Texto flotante",
+
+  "gui.floatingtext.title": "Editar texto flotante",
+  "gui.floatingtext.text": "Texto",
+  "gui.floatingtext.scale": "Tamaño",
+  "gui.floatingtext.offsetX": "Desplazamiento X",
+  "gui.floatingtext.offsetY": "Desplazamiento Y",
+  "gui.floatingtext.offsetZ": "Desplazamiento Z",
+  "gui.floatingtext.rotation": "Rotación",
+  "gui.floatingtext.color": "Color",
+  "gui.floatingtext.save": "Guardar",
+  "gui.floatingtext.delete": "Eliminar",
+  "gui.floatingtext.cancel": "Cancelar",
+  "gui.floatingtext.ownerOnly": "Solo el creador puede editar",
+
+  "message.floatingtext.textEmpty": "El texto no puede estar vacío",
+  "message.floatingtext.blocked": "La posición está bloqueada por un bloque, no se puede colocar el texto",
+
+  "floatingtext.color.white": "Blanco",
+  "floatingtext.color.black": "Negro",
+  "floatingtext.color.red": "Rojo",
+  "floatingtext.color.yellow": "Amarillo",
+  "floatingtext.color.green": "Verde",
+  "floatingtext.color.blue": "Azul",
+  "floatingtext.color.purple": "Púrpura",
+  "floatingtext.color.orange": "Naranja"
+}

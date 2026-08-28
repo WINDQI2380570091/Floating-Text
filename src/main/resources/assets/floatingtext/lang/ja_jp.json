@@ -1,0 +1,31 @@
+{
+  "item.floatingtext.floating_text_tool": "フローティングテキストツール",
+  "item.floatingtext.t72av": "T-72AV",
+  "itemGroup.floatingtext": "フローティングテキスト",
+  "entity.floatingtext.floating_text": "フローティングテキスト",
+
+  "gui.floatingtext.title": "フローティングテキストの編集",
+  "gui.floatingtext.text": "テキスト",
+  "gui.floatingtext.scale": "サイズ",
+  "gui.floatingtext.offsetX": "Xオフセット",
+  "gui.floatingtext.offsetY": "Yオフセット",
+  "gui.floatingtext.offsetZ": "Zオフセット",
+  "gui.floatingtext.rotation": "回転",
+  "gui.floatingtext.color": "色",
+  "gui.floatingtext.save": "保存",
+  "gui.floatingtext.delete": "削除",
+  "gui.floatingtext.cancel": "キャンセル",
+  "gui.floatingtext.ownerOnly": "作成者のみ編集できます",
+
+  "message.floatingtext.textEmpty": "テキストを入力してください",
+  "message.floatingtext.blocked": "ブロックに遮られてテキストを配置できません",
+
+  "floatingtext.color.white": "白",
+  "floatingtext.color.black": "黒",
+  "floatingtext.color.red": "赤",
+  "floatingtext.color.yellow": "黄",
+  "floatingtext.color.green": "緑",
+  "floatingtext.color.blue": "青",
+  "floatingtext.color.purple": "紫",
+  "floatingtext.color.orange": "オレンジ"
+}
