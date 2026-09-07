@@ -1,0 +1,31 @@
+{
+  "item.floatingtext.floating_text_tool": "플로팅 텍스트 도구",
+  "item.floatingtext.t72av": "T-72AV",
+  "itemGroup.floatingtext": "플로팅 텍스트",
+  "entity.floatingtext.floating_text": "플로팅 텍스트",
+
+  "gui.floatingtext.title": "플로팅 텍스트 편집",
+  "gui.floatingtext.text": "텍스트",
+  "gui.floatingtext.scale": "크기",
+  "gui.floatingtext.offsetX": "X 오프셋",
+  "gui.floatingtext.offsetY": "Y 오프셋",
+  "gui.floatingtext.offsetZ": "Z 오프셋",
+  "gui.floatingtext.rotation": "회전",
+  "gui.floatingtext.color": "색상",
+  "gui.floatingtext.save": "저장",
+  "gui.floatingtext.delete": "삭제",
+  "gui.floatingtext.cancel": "취소",
+  "gui.floatingtext.ownerOnly": "만든 사람만 편집할 수 있습니다",
+
+  "message.floatingtext.textEmpty": "텍스트를 입력하세요",
+  "message.floatingtext.blocked": "블록에 막혀 텍스트를 배치할 수 없습니다",
+
+  "floatingtext.color.white": "흰색",
+  "floatingtext.color.black": "검은색",
+  "floatingtext.color.red": "빨간색",
+  "floatingtext.color.yellow": "노란색",
+  "floatingtext.color.green": "초록색",
+  "floatingtext.color.blue": "파란색",
+  "floatingtext.color.purple": "보라색",
+  "floatingtext.color.orange": "주황색"
+}

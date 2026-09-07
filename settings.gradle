@@ -1,0 +1,19 @@
+// Gradle 插件仓库：从这里下载 ForgeGradle
+pluginManagement {
+    repositories {
+        gradlePluginPortal()
+        maven {
+            name = 'MinecraftForge'
+            url = 'https://maven.minecraftforge.net/'
+        }
+        // 国内网络如果下载插件很慢，可以取消下面一行的注释，使用阿里云镜像
+        // maven { name = 'Aliyun'; url = 'https://maven.aliyun.com/repository/public' }
+    }
+}
+
+// 如果本机没有 JDK 17，Gradle 会自动下载一个（需要网络）
+plugins {
+    id 'org.gradle.toolchains.foojay-resolver-convention' version '0.7.0'
+}
+
+rootProject.name = 'floatingtext'

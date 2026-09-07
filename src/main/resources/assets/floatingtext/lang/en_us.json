@@ -1,0 +1,31 @@
+{
+  "item.floatingtext.floating_text_tool": "Floating Text Tool",
+  "item.floatingtext.t72av": "T-72AV",
+  "itemGroup.floatingtext": "Floating Text",
+  "entity.floatingtext.floating_text": "Floating Text",
+
+  "gui.floatingtext.title": "Edit Floating Text",
+  "gui.floatingtext.text": "Text",
+  "gui.floatingtext.scale": "Scale",
+  "gui.floatingtext.offsetX": "Offset X",
+  "gui.floatingtext.offsetY": "Offset Y",
+  "gui.floatingtext.offsetZ": "Offset Z",
+  "gui.floatingtext.rotation": "Rotation",
+  "gui.floatingtext.color": "Color",
+  "gui.floatingtext.save": "Save",
+  "gui.floatingtext.delete": "Delete",
+  "gui.floatingtext.cancel": "Cancel",
+  "gui.floatingtext.ownerOnly": "Only the owner can edit",
+
+  "message.floatingtext.textEmpty": "Text cannot be empty",
+  "message.floatingtext.blocked": "The position is blocked by a block, cannot place text",
+
+  "floatingtext.color.white": "White",
+  "floatingtext.color.black": "Black",
+  "floatingtext.color.red": "Red",
+  "floatingtext.color.yellow": "Yellow",
+  "floatingtext.color.green": "Green",
+  "floatingtext.color.blue": "Blue",
+  "floatingtext.color.purple": "Purple",
+  "floatingtext.color.orange": "Orange"
+}

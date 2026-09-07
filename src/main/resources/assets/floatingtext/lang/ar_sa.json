@@ -1,0 +1,31 @@
+{
+  "item.floatingtext.floating_text_tool": "أداة النص العائم",
+  "item.floatingtext.t72av": "T-72AV",
+  "itemGroup.floatingtext": "النص العائم",
+  "entity.floatingtext.floating_text": "نص عائم",
+
+  "gui.floatingtext.title": "تحرير النص العائم",
+  "gui.floatingtext.text": "النص",
+  "gui.floatingtext.scale": "الحجم",
+  "gui.floatingtext.offsetX": "إزاحة X",
+  "gui.floatingtext.offsetY": "إزاحة Y",
+  "gui.floatingtext.offsetZ": "إزاحة Z",
+  "gui.floatingtext.rotation": "الدوران",
+  "gui.floatingtext.color": "اللون",
+  "gui.floatingtext.save": "حفظ",
+  "gui.floatingtext.delete": "حذف",
+  "gui.floatingtext.cancel": "إلغاء",
+  "gui.floatingtext.ownerOnly": "يمكن للإنشاء فقط التعديل",
+
+  "message.floatingtext.textEmpty": "لا يمكن أن يكون النص فارغًا",
+  "message.floatingtext.blocked": "الموقع محجوب بواسطة كتلة، لا يمكن وضع النص",
+
+  "floatingtext.color.white": "أبيض",
+  "floatingtext.color.black": "أسود",
+  "floatingtext.color.red": "أحمر",
+  "floatingtext.color.yellow": "أصفر",
+  "floatingtext.color.green": "أخضر",
+  "floatingtext.color.blue": "أزرق",
+  "floatingtext.color.purple": "بنفسجي",
+  "floatingtext.color.orange": "برتقالي"
+}

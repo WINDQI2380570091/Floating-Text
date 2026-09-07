@@ -1,0 +1,101 @@
+// ============================================================
+// Floating Text 模组构建脚本（Forge 1.20.1）
+// 不需要手动修改此文件。所有可调参数都在 gradle.properties 里。
+// ============================================================
+
+plugins {
+    id 'idea'
+    id 'net.minecraftforge.gradle' version '[6.0,6.2)'
+}
+
+// 从 gradle.properties 读取：组、版本、名字
+group = mod_group_id
+version = mod_version
+base {
+    archivesName = mod_id
+}
+
+// Forge 1.20.1 要求 Java 17
+java {
+    toolchain.languageVersion = JavaLanguageVersion.of(17)
+}
+
+minecraft {
+    // 使用官方 Mojang 映射（最直观的类名/方法名）
+    mappings channel: mapping_channel, version: mapping_version
+
+    copyIdeResources = true
+
+    // 开发运行配置
+    runs {
+        client {
+            workingDirectory project.file('run')
+            property 'forge.logging.markers', 'REGISTRIES'
+            property 'forge.logging.console.level', 'debug'
+            property 'forge.enabledGameTestNamespaces', mod_id
+            mods {
+                "${mod_id}" {
+                    source sourceSets.main
+                }
+            }
+        }
+
+        server {
+            workingDirectory project.file('run')
+            property 'forge.logging.markers', 'REGISTRIES'
+            property 'forge.logging.console.level', 'debug'
+            property 'forge.enabledGameTestNamespaces', mod_id
+            args '--nogui'
+            mods {
+                "${mod_id}" {
+                    source sourceSets.main
+                }
+            }
+        }
+    }
+}
+
+sourceSets.main.resources { srcDir 'src/generated/resources' }
+
+repositories {
+    // 本模组不依赖任何第三方库，保持空白
+}
+
+dependencies {
+    // Forge 本体（版本在 gradle.properties 中指定）
+    minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
+}
+
+// 用 gradle.properties 里的值替换 mods.toml 中的 ${...} 占位符
+tasks.named('processResources', ProcessResources).configure {
+    var replaceProperties = [
+            minecraft_version: minecraft_version, minecraft_version_range: minecraft_version_range,
+            forge_version: forge_version, forge_version_range: forge_version_range,
+            loader_version_range: loader_version_range,
+            mod_id: mod_id, mod_name: mod_name, mod_license: mod_license, mod_version: mod_version,
+            mod_authors: mod_authors
+    ]
+    inputs.properties replaceProperties
+
+    filesMatching(['META-INF/mods.toml', 'pack.mcmeta']) {
+        expand replaceProperties + [project: project]
+    }
+}
+
+// 打包后的 jar 信息
+tasks.named('jar', Jar).configure {
+    manifest {
+        attributes([
+                'Specification-Title'     : mod_id,
+                'Specification-Version'   : '1',
+                'Implementation-Title'    : mod_id,
+                'Implementation-Version'  : project.jar.archiveVersion,
+                'Implementation-Timestamp': new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
+        ])
+    }
+}
+
+// 源码用 UTF-8 编码（注释里有中文，必须用 UTF-8，否则 Windows 下编译报错）
+tasks.withType(JavaCompile).configureEach {
+    options.encoding = 'UTF-8'
+}

@@ -1,0 +1,31 @@
+{
+  "item.floatingtext.floating_text_tool": "Инструмент парящего текста",
+  "item.floatingtext.t72av": "T-72AV",
+  "itemGroup.floatingtext": "Парящий текст",
+  "entity.floatingtext.floating_text": "Парящий текст",
+
+  "gui.floatingtext.title": "Редактировать парящий текст",
+  "gui.floatingtext.text": "Текст",
+  "gui.floatingtext.scale": "Размер",
+  "gui.floatingtext.offsetX": "Сдвиг X",
+  "gui.floatingtext.offsetY": "Сдвиг Y",
+  "gui.floatingtext.offsetZ": "Сдвиг Z",
+  "gui.floatingtext.rotation": "Поворот",
+  "gui.floatingtext.color": "Цвет",
+  "gui.floatingtext.save": "Сохранить",
+  "gui.floatingtext.delete": "Удалить",
+  "gui.floatingtext.cancel": "Отмена",
+  "gui.floatingtext.ownerOnly": "Редактировать может только создатель",
+
+  "message.floatingtext.textEmpty": "Текст не может быть пустым",
+  "message.floatingtext.blocked": "Позиция заблокирована блоком, невозможно разместить текст",
+
+  "floatingtext.color.white": "Белый",
+  "floatingtext.color.black": "Чёрный",
+  "floatingtext.color.red": "Красный",
+  "floatingtext.color.yellow": "Жёлтый",
+  "floatingtext.color.green": "Зелёный",
+  "floatingtext.color.blue": "Синий",
+  "floatingtext.color.purple": "Фиолетовый",
+  "floatingtext.color.orange": "Оранжевый"
+}
