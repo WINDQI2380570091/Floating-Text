@@ -120,29 +120,36 @@ public class FloatingTextEntity extends Entity {
     }
 
     // 存档写入
+    // 键名都加 ft 前缀 原版 Entity 自己也用 Rotation 之类的键 不加前缀会把朝向数据覆盖掉
     @Override
     protected void addAdditionalSaveData(CompoundTag tag) {
-        tag.putString("Text", getText());
-        tag.putInt("Color", getColor());
-        tag.putFloat("Scale", getScale());
-        tag.putFloat("OffsetX", getOffsetX());
-        tag.putFloat("OffsetY", getOffsetY());
-        tag.putFloat("OffsetZ", getOffsetZ());
-        tag.putFloat("Rotation", getRotation());
-        tag.putString("Owner", getOwnerString());
+        tag.putString("ftText", getText());
+        tag.putInt("ftColor", getColor());
+        tag.putFloat("ftScale", getScale());
+        tag.putFloat("ftOffsetX", getOffsetX());
+        tag.putFloat("ftOffsetY", getOffsetY());
+        tag.putFloat("ftOffsetZ", getOffsetZ());
+        tag.putFloat("ftRotation", getRotation());
+        tag.putString("ftOwner", getOwnerString());
     }
 
     // 读取存档 数值都要做范围限制 存档被改坏也不会出巨型文字
     @Override
     protected void readAdditionalSaveData(CompoundTag tag) {
-        setText(truncate(tag.getString("Text"), MAX_TEXT_LENGTH));
-        setColor(tag.getInt("Color"));
-        setScale(safeClamp(tag.getFloat("Scale"), 0.15F, 10.0F, 1.0F));
-        setOffsetX(safeClamp(tag.getFloat("OffsetX"), -1.0F, 1.0F, 0.0F));
-        setOffsetY(safeClamp(tag.getFloat("OffsetY"), -1.0F, 1.0F, 0.0F));
-        setOffsetZ(safeClamp(tag.getFloat("OffsetZ"), -1.0F, 1.0F, 0.0F));
-        setRotation(normalizeRotation(tag.getFloat("Rotation")));
-        setOwnerString(tag.getString("Owner"));
+        // 老存档用的是不带前缀的键 读不到新键就回退到旧键 免得升级后文字数据全丢
+        setText(truncate(tag.contains("ftText") ? tag.getString("ftText") : tag.getString("Text"), MAX_TEXT_LENGTH));
+        setColor(tag.contains("ftColor") ? tag.getInt("ftColor") : tag.getInt("Color"));
+        setScale(safeClamp(readFloat(tag, "ftScale", "Scale"), 0.15F, 10.0F, 1.0F));
+        setOffsetX(safeClamp(readFloat(tag, "ftOffsetX", "OffsetX"), -1.0F, 1.0F, 0.0F));
+        setOffsetY(safeClamp(readFloat(tag, "ftOffsetY", "OffsetY"), -1.0F, 1.0F, 0.0F));
+        setOffsetZ(safeClamp(readFloat(tag, "ftOffsetZ", "OffsetZ"), -1.0F, 1.0F, 0.0F));
+        setRotation(normalizeRotation(readFloat(tag, "ftRotation", "Rotation")));
+        setOwnerString(tag.contains("ftOwner") ? tag.getString("ftOwner") : tag.getString("Owner"));
+    }
+
+    // 先读新键 没有就读旧键 兼容老存档
+    private static float readFloat(CompoundTag tag, String key, String legacyKey) {
+        return tag.contains(key) ? tag.getFloat(key) : tag.getFloat(legacyKey);
     }
 
     // 网络同步用的 tag 按键名读写 不依赖字段顺序 服务端客户端共用
