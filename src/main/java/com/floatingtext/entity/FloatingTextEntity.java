@@ -11,6 +11,7 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Pose;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.AABB;
 
 import java.util.UUID;
 
@@ -44,8 +45,12 @@ public class FloatingTextEntity extends Entity {
     // 文字长度上限, 输入框和存档都按这个截断 防止超长文字拖慢渲染
     public static final int MAX_TEXT_LENGTH = 100;
 
+    // 构造还没走完的时候不能算碰撞箱 数据字段还没准备好
+    private boolean boxReady;
+
     public FloatingTextEntity(EntityType<?> type, Level level) {
         super(type, level);
+        this.boxReady = true;
     }
 
     // 放置文字时用的构造
@@ -85,22 +90,86 @@ public class FloatingTextEntity extends Entity {
     @Override
     public void onSyncedDataUpdated(EntityDataAccessor<?> key) {
         super.onSyncedDataUpdated(key);
-        if (key.equals(DATA_TEXT) || key.equals(DATA_SCALE)
+        if (key.equals(DATA_TEXT) || key.equals(DATA_SCALE) || key.equals(DATA_ROTATION)
                 || key.equals(DATA_OFFSET_X) || key.equals(DATA_OFFSET_Y) || key.equals(DATA_OFFSET_Z)) {
             refreshDimensions();
         }
     }
 
-    // 动态算碰撞箱, 游戏会自动调用 不用手动设置
+    // 记录文字本身有多大 实际判定箱在 makeBoundingBox 里单独算
     @Override
     public EntityDimensions getDimensions(Pose pose) {
         float scale = getScale();
         // 全角字符渲染宽度差不多是半角的两倍, 分开算避免长中文点不到
-        float width = safeClamp(estimateTextWidth(getText()) * 0.05F * scale + Math.abs(getOffsetX()) * 2.0F + 0.5F,
-                0.6F, 8.0F, 0.6F);
-        float height = safeClamp(9 * 0.05F * scale + Math.abs(getOffsetY()) * 2.0F + 0.5F,
-                0.4F, 4.0F, 0.4F);
+        float width = safeClamp(estimateTextWidth(getText()) * 0.05F * scale,
+                0.2F, 16.0F, 0.2F);
+        float height = safeClamp(9 * 0.05F * scale,
+                0.2F, 4.0F, 0.2F);
         return new EntityDimensions(width, height, false);
+    }
+
+    // 判定箱就是文字那一片 薄薄一层 贴着文字走
+    // 原版的 EntityDimensions 深度等于宽度 直接用会变成一个大方盒 会穿墙还会挡住旁边的文字
+    @Override
+    protected AABB makeBoundingBox() {
+        if (!this.boxReady) {
+            return super.makeBoundingBox();
+        }
+        double scale = getScale() * 0.05D;
+        double halfWidth = estimateTextWidth(getText()) / 2.0D * scale;
+        double halfHeight = 4.5D * scale;
+        double cosZ = Math.cos(Math.toRadians(getRotation()));
+        double sinZ = Math.sin(Math.toRadians(getRotation()));
+        double cosY = Math.cos(Math.toRadians(-getYRot()));
+        double sinY = Math.sin(Math.toRadians(-getYRot()));
+        double cosX = Math.cos(Math.toRadians(-getXRot()));
+        double sinX = Math.sin(Math.toRadians(-getXRot()));
+        // 四个角都转一遍 取最大范围 这样文字转到哪个角度箱子都跟得上
+        double ex = 0.0D;
+        double ey = 0.0D;
+        double ez = 0.0D;
+        for (int i = 0; i < 4; i++) {
+            double px = (i % 2 == 0) ? -halfWidth : halfWidth;
+            double py = (i < 2) ? -halfHeight : halfHeight;
+            double x1 = px * cosZ - py * sinZ;
+            double y1 = px * sinZ + py * cosZ;
+            double x2 = x1 * cosY;
+            double z2 = -x1 * sinY;
+            double y3 = y1 * cosX - z2 * sinX;
+            double z3 = y1 * sinX + z2 * cosX;
+            ex = Math.max(ex, Math.abs(x2));
+            ey = Math.max(ey, Math.abs(y3));
+            ez = Math.max(ez, Math.abs(z3));
+        }
+        // 留一点点余量 太薄点不到
+        ex = Math.min(ex, 8.0D) + 0.05D;
+        ey = Math.min(ey, 4.0D) + 0.05D;
+        ez = Math.min(ez, 8.0D) + 0.05D;
+        double centerX = getX() + getOffsetX();
+        double centerY = getY() + getOffsetY();
+        double centerZ = getZ() + getOffsetZ();
+        return new AABB(centerX - ex, centerY - ey, centerZ - ez,
+                centerX + ex, centerY + ey, centerZ + ez);
+    }
+
+    // 原版刷新碰撞箱是按 EntityDimensions 算的 会盖掉自定义的薄片箱子 所以补一下
+    @Override
+    public void refreshDimensions() {
+        super.refreshDimensions();
+        this.setBoundingBox(this.makeBoundingBox());
+    }
+
+    // 朝向变了也要重算 不然箱子还留在旧方向
+    @Override
+    public void setYRot(float yRot) {
+        super.setYRot(yRot);
+        this.setBoundingBox(this.makeBoundingBox());
+    }
+
+    @Override
+    public void setXRot(float xRot) {
+        super.setXRot(xRot);
+        this.setBoundingBox(this.makeBoundingBox());
     }
 
     // 粗略估算文字宽度 全角算 12 像素 半角算 6 像素
